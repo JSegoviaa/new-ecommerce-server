@@ -7,9 +7,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
 import { AuthModule } from './auth/auth.module';
+import { CategoriesModule } from './categories/categories.module';
 import { CommonModule } from './common/common.module';
+import { ProductsModule } from './products/products.module';
 import { RolesModule } from './roles/roles.module';
+import { SubcategoriesModule } from './subcategories/subcategories.module';
 import { UsersModule } from './users/users.module';
+import { VariantsModule } from './variants/variants.module';
 
 @Module({
   imports: [
@@ -31,9 +35,13 @@ import { UsersModule } from './users/users.module';
       autoLoadEntities: true,
     }),
     AuthModule,
+    CategoriesModule,
     CommonModule,
+    ProductsModule,
     RolesModule,
+    SubcategoriesModule,
     UsersModule,
+    VariantsModule,
   ],
   controllers: [],
   providers: [],

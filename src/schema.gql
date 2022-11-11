@@ -21,16 +21,37 @@ type User {
   role: Role!
 }
 
+type Category {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   createUser: String!
+  categories: [Category!]!
+  category(id: Int!): Category!
   roles: [Role!]!
   role(id: Int!): Role!
 }
 
 type Mutation {
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  removeCategory(id: Int!): Category!
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   removeRole(id: Int!): Role!
+}
+
+input CreateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input CreateRoleInput {
