@@ -14,6 +14,5 @@ export class Role {
   role: string;
 
   @OneToMany(() => User, (user) => user.role)
-  @Field(() => User)
   user: User;
 }

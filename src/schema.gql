@@ -5,23 +5,29 @@
 type Role {
   id: Int!
   role: String!
-  user: User!
-}
-
-type User {
-  id: ID!
-  firstName: String!
-  lastName: String!
-  email: String!
-  phoneNumber: String!
-  password: String!
-  createdAt: String!
-  updatedAt: String!
-  isActive: Boolean!
-  role: Role!
 }
 
 type Category {
+  id: Int!
+  title: String!
+  slug: String!
+  isActive: Boolean!
+  isPublished: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Product {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Subcategory {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Variant {
   """Example field (placeholder)"""
   exampleField: Int!
 }
@@ -30,17 +36,32 @@ type Query {
   createUser: String!
   categories: [Category!]!
   category(id: Int!): Category!
+  products: [Product!]!
+  product(id: Int!): Product!
   roles: [Role!]!
   role(id: Int!): Role!
+  subcategories: [Subcategory!]!
+  subcategory(id: Int!): Subcategory!
+  variants: [Variant!]!
+  variant(id: Int!): Variant!
 }
 
 type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   removeCategory(id: Int!): Category!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   removeRole(id: Int!): Role!
+  createSubcategory(createSubcategoryInput: CreateSubcategoryInput!): Subcategory!
+  updateSubcategory(updateSubcategoryInput: UpdateSubcategoryInput!): Subcategory!
+  removeSubcategory(id: Int!): Subcategory!
+  createVariant(createVariantInput: CreateVariantInput!): Variant!
+  updateVariant(updateVariantInput: UpdateVariantInput!): Variant!
+  removeVariant(id: Int!): Variant!
 }
 
 input CreateCategoryInput {
@@ -54,11 +75,44 @@ input UpdateCategoryInput {
   id: Int!
 }
 
+input CreateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
 input CreateRoleInput {
   role: String!
 }
 
 input UpdateRoleInput {
   role: String
+  id: Int!
+}
+
+input CreateSubcategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateSubcategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateVariantInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateVariantInput {
+  """Example field (placeholder)"""
+  exampleField: Int
   id: Int!
 }
