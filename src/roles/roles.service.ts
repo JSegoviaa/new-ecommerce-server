@@ -60,7 +60,6 @@ export class RolesService {
   async remove(id: number): Promise<Role> {
     try {
       const role = await this.findOne(id);
-      console.log(role, 'aver');
 
       await this.rolesRepository.remove(role);
 
