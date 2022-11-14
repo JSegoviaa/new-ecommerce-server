@@ -6,8 +6,6 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 
 import { User } from '../../users/entities';
@@ -41,14 +39,5 @@ export class UserRoleGuard implements CanActivate {
     }
 
     throw new ForbiddenException(`User ${user.firstName} needs a valid role`);
-  }
-}
-
-export class AuthGql extends AuthGuard('jwt') {
-  getRequest(context: ExecutionContext) {
-    const ctx = GqlExecutionContext.create(context);
-    const request = ctx.getContext().req;
-
-    return request;
   }
 }

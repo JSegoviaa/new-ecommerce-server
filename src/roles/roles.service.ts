@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateRoleInput, UpdateRoleInput } from './dto';
 import { Role } from './entities';
 import { ErrorHandlerService } from '../common/services/error-handler';
+import { CreateRoleDto, UpdateRoleDto } from './dto';
 
 @Injectable()
 export class RolesService {
@@ -13,9 +13,9 @@ export class RolesService {
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
 
-  async create(createRoleInput: CreateRoleInput): Promise<Role> {
+  async create(createRoleDto: CreateRoleDto): Promise<Role> {
     try {
-      const newRole = this.rolesRepository.create(createRoleInput);
+      const newRole = this.rolesRepository.create(createRoleDto);
 
       return await this.rolesRepository.save(newRole);
     } catch (error) {
@@ -45,11 +45,11 @@ export class RolesService {
     }
   }
 
-  async update(id: number, updateRoleInput: UpdateRoleInput): Promise<Role> {
+  async update(id: number, updateRoleDto: UpdateRoleDto): Promise<Role> {
     try {
-      const role = await this.rolesRepository.preload(updateRoleInput);
-
       await this.findOne(id);
+
+      const role = await this.rolesRepository.preload({ id, ...updateRoleDto });
 
       return await this.rolesRepository.save(role);
     } catch (error) {
@@ -60,6 +60,9 @@ export class RolesService {
   async remove(id: number): Promise<Role> {
     try {
       const role = await this.findOne(id);
+      console.log(role, 'aver');
+
+      await this.rolesRepository.remove(role);
 
       return { ...role, id };
     } catch (error) {

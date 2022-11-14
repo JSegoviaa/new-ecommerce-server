@@ -11,7 +11,13 @@ export class ErrorHandlerService {
   private readonly logger = new Logger('ErrorHandleService');
 
   public errorHandler(error: any) {
+    console.log({ error });
     if (error.code === '23505') {
+      this.logger.error(error);
+      throw new BadRequestException(error.detail);
+    }
+
+    if (error.code === '23503') {
       this.logger.error(error);
       throw new BadRequestException(error.detail);
     }
