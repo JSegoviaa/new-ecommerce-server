@@ -3,10 +3,11 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from './auth/auth.module';
+import { CategoriesModule } from './categories/categories.module';
 import { CommonModule } from './common/common.module';
 import { RolesModule } from './roles/roles.module';
+import { SeedModule } from './seed/seed.module';
 import { UsersModule } from './users/users.module';
-import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -22,10 +23,11 @@ import { CategoriesModule } from './categories/categories.module';
       autoLoadEntities: true,
     }),
     AuthModule,
+    CategoriesModule,
     CommonModule,
     RolesModule,
+    SeedModule,
     UsersModule,
-    CategoriesModule,
   ],
   controllers: [],
   providers: [],
