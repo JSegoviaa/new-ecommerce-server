@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as dayjs from 'dayjs';
 import { CreateTagDto, UpdateTagDto } from './dto';
 import { Tag } from './entities';
 import { ErrorHandlerService } from '../common/services/error-handler';
@@ -59,8 +58,33 @@ export class TagsService {
     }
   }
 
-  update(id: number, updateTagDto: UpdateTagDto) {
-    return `This action updates a #${id} tag`;
+  async findOneByName(name: string): Promise<Tag> {
+    try {
+      const tag = await this.tagsRepository.findOneBy({ name });
+
+      if (!tag) {
+        throw new NotFoundException(`Tag with name ${name} doest not exist`);
+      }
+      return tag;
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  async update(id: number, updateTagDto: UpdateTagDto): Promise<Tag> {
+    try {
+      await this.findOne(id);
+
+      const tag = await this.tagsRepository.preload({
+        id,
+        ...updateTagDto,
+        name: updateTagDto.name.toLowerCase(),
+      });
+
+      return await this.tagsRepository.save(tag);
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
   }
 
   async remove(id: number): Promise<Tag> {

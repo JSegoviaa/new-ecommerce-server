@@ -9,5 +9,5 @@ export class Tag {
   name: string;
 
   @Column({ type: 'timestamp', default: dayjs().format() })
-  createdDate: Date;
+  createdAt: Date;
 }
