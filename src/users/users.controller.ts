@@ -8,12 +8,13 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { PaginationDto } from '../common/dtos';
+import { QueryDto } from '../common/dtos';
 import { UpdateUserDto } from './dto';
 import { User } from './entities';
 import { UsersService } from './users.service';
 import { Auth, GetUser } from '../auth/decorators';
 import { ValidRoles } from '../auth/interfaces';
+import { Users } from './interface';
 
 @Controller('users')
 export class UsersController {
@@ -21,8 +22,8 @@ export class UsersController {
 
   @Get()
   @Auth(ValidRoles.superAdmin, ValidRoles.admin)
-  async getUsers(@Query() paginationDto: PaginationDto): Promise<User[]> {
-    return await this.usersService.getUsers(paginationDto);
+  async getUsers(@Query() queryDto: QueryDto): Promise<Users> {
+    return await this.usersService.getUsers(queryDto);
   }
 
   @Get(':id')

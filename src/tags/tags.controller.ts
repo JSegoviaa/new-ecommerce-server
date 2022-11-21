@@ -12,7 +12,7 @@ import {
 import { CreateTagDto, UpdateTagDto } from './dto';
 import { Tag } from './entities';
 import { TagsService } from './tags.service';
-import { PaginationDto } from '../common/dtos/pagination.dto';
+import { QueryDto } from '../common/dtos/pagination.dto';
 import { Tags } from './interface';
 import { Auth } from '../auth/decorators';
 import { ValidRoles } from '../auth/interfaces';
@@ -29,8 +29,8 @@ export class TagsController {
 
   @Get()
   @Auth(ValidRoles.superAdmin)
-  async findAll(@Query() paginationDto: PaginationDto): Promise<Tags> {
-    return await this.tagsService.findAll(paginationDto);
+  async findAll(@Query() queryDto: QueryDto): Promise<Tags> {
+    return await this.tagsService.findAll(queryDto);
   }
 
   @Get(':id')

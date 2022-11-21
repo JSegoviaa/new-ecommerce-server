@@ -12,9 +12,10 @@ import * as dayjs from 'dayjs';
 import { User } from './entities';
 import { RegisterDto } from '../auth/dto';
 import { ErrorHandlerService } from '../common/services/error-handler';
-import { PaginationDto } from '../common/dtos';
+import { QueryDto } from '../common/dtos';
 import { UpdateUserDto } from './dto';
 import { ValidRoles } from 'src/auth/interfaces';
+import { Users } from './interface';
 
 @Injectable()
 export class UsersService {
@@ -23,18 +24,22 @@ export class UsersService {
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
 
-  async getUsers(paginationDto: PaginationDto): Promise<User[]> {
-    const { limit = 10, offset = 10 } = paginationDto;
+  async getUsers(queryDto: QueryDto): Promise<Users> {
+    const { limit = 10, offset = 10, sort = 'ASC', order = 'id' } = queryDto;
 
     try {
-      const users = await this.usersRepository.find({
-        take: limit,
-        skip: offset,
-      });
+      const [users, total] = await Promise.all([
+        this.usersRepository.find({
+          take: limit,
+          skip: offset,
+          order: { [order]: sort },
+        }),
+        this.usersRepository.count(),
+      ]);
 
       users.forEach((user) => delete user.password);
 
-      return users;
+      return { total, users };
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
     }

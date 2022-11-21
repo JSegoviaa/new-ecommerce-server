@@ -1,7 +1,8 @@
 import { Type } from 'class-transformer';
-import { IsOptional, IsPositive, Min } from 'class-validator';
+import { IsOptional, IsPositive, IsString, Min } from 'class-validator';
+import { FindOptionsOrderValue } from 'typeorm';
 
-export class PaginationDto {
+export class QueryDto {
   @IsOptional()
   @IsPositive()
   @Type(() => Number) // enableImplicitConversions: true
@@ -11,4 +12,12 @@ export class PaginationDto {
   @Min(0)
   @Type(() => Number) // enableImplicitConversions: true
   offset?: number;
+
+  @IsOptional()
+  @IsString()
+  order?: string;
+
+  @IsOptional()
+  @IsString()
+  sort?: FindOptionsOrderValue;
 }

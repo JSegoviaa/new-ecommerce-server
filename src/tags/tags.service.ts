@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateTagDto, UpdateTagDto } from './dto';
 import { Tag } from './entities';
 import { ErrorHandlerService } from '../common/services/error-handler';
-import { PaginationDto } from '../common/dtos';
+import { QueryDto } from '../common/dtos';
 import { Tags } from './interface';
 
 @Injectable()
@@ -27,14 +27,15 @@ export class TagsService {
     }
   }
 
-  async findAll(paginationDto: PaginationDto): Promise<Tags> {
-    const { limit = 10, offset = 0 } = paginationDto;
+  async findAll(queryDto: QueryDto): Promise<Tags> {
+    const { limit = 10, offset = 0, sort = 'ASC', order = 'id' } = queryDto;
 
     try {
       const [tags, total] = await Promise.all([
         this.tagsRepository.find({
           take: limit,
           skip: offset,
+          order: { [order]: sort },
         }),
         this.tagsRepository.count(),
       ]);
