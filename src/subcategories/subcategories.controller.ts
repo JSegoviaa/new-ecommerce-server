@@ -1,44 +1,58 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
 } from '@nestjs/common';
+import { Auth, GetUser } from '../auth/decorators';
 import { CreateSubcategoryDto, UpdateSubcategoryDto } from './dto';
+import { Subcategory } from './entities';
 import { SubcategoriesService } from './subcategories.service';
+import { User } from '../users/entities/user.entity';
 
 @Controller('subcategories')
 export class SubcategoriesController {
   constructor(private readonly subcategoriesService: SubcategoriesService) {}
 
   @Post()
-  create(@Body() createSubcategoryDto: CreateSubcategoryDto) {
-    return this.subcategoriesService.create(createSubcategoryDto);
+  @Auth()
+  async create(
+    @Body() createSubcategoryDto: CreateSubcategoryDto,
+    @GetUser() user: User,
+  ): Promise<Subcategory> {
+    return await this.subcategoriesService.create(createSubcategoryDto, user);
   }
 
   @Get()
-  findAll() {
-    return this.subcategoriesService.findAll();
+  async findAll() {
+    return await this.subcategoriesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subcategoriesService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Subcategory> {
+    return await this.subcategoriesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
+  @Put(':id')
+  @Auth()
+  async update(
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateSubcategoryDto: UpdateSubcategoryDto,
-  ) {
-    return this.subcategoriesService.update(+id, updateSubcategoryDto);
+    @GetUser() user: User,
+  ): Promise<Subcategory> {
+    return await this.subcategoriesService.update(
+      id,
+      updateSubcategoryDto,
+      user,
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subcategoriesService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<Subcategory> {
+    return await this.subcategoriesService.remove(+id);
   }
 }
