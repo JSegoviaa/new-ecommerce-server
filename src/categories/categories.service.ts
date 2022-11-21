@@ -5,8 +5,9 @@ import * as dayjs from 'dayjs';
 
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 import { Category } from './entities';
-import { ErrorHandlerService } from '../common/services/error-handler/error-handler.service';
 import { User } from '../users/entities';
+import { ErrorHandlerService } from '../common/services/error-handler/error-handler.service';
+import { CreateSlugService } from '../common/services/create-slug';
 
 @Injectable()
 export class CategoriesService {
@@ -14,6 +15,7 @@ export class CategoriesService {
     @InjectRepository(Category)
     private readonly categoryRepostiry: Repository<Category>,
     private readonly errorHandlerService: ErrorHandlerService,
+    private readonly createSlugService: CreateSlugService,
   ) {}
 
   async create(
@@ -25,7 +27,7 @@ export class CategoriesService {
         ...createCategoryDto,
         createdBy: user,
         updatedBy: user,
-        slug: createCategoryDto.title + Math.random(),
+        slug: this.createSlugService.createSlug(createCategoryDto.title),
       });
 
       return await this.categoryRepostiry.save(newCategory);
