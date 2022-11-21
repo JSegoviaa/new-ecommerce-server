@@ -1,7 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as dayjs from 'dayjs';
 
 import { Role } from '../../roles/entities';
+import { Category } from '../../categories/entities';
 
 @Entity({ name: 'users' })
 export class User {
@@ -40,4 +47,10 @@ export class User {
 
   @ManyToOne(() => Role, (role) => role.user, { eager: true })
   role: Role;
+
+  @OneToMany(() => Category, (category) => category.createdBy)
+  createdBy: Category;
+
+  @OneToMany(() => Category, (category) => category.updatedBy)
+  updatedBy: Category;
 }
