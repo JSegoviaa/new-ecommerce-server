@@ -1,1 +1,2 @@
-export * from './variant.entity';
+export * from './variant-size.entity';
+export * from './variant-color.entity';

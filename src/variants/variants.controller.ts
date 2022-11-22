@@ -1,41 +1,82 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
 } from '@nestjs/common';
-import { CreateVariantDto, UpdateVariantDto } from './dto';
+
+import {
+  CreateVariantColorDto,
+  CreateVariantSizeDto,
+  UpdateVariantColorDto,
+  UpdateVariantSizeDto,
+} from './dto';
+import { VariantSize } from './entities';
 import { VariantsService } from './variants.service';
 
 @Controller('variants')
 export class VariantsController {
   constructor(private readonly variantsService: VariantsService) {}
 
-  @Post()
-  create(@Body() createVariantDto: CreateVariantDto) {
-    return this.variantsService.create(createVariantDto);
+  @Post('colors')
+  async createVariantColor(@Body() createVariantDto: CreateVariantColorDto) {
+    return this.variantsService.createVariantColor(createVariantDto);
   }
 
-  @Get()
-  findAll() {
-    return this.variantsService.findAll();
+  @Get('colors')
+  async findAllVariantColors() {
+    return this.variantsService.findAllVariantColors();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.variantsService.findOne(+id);
+  @Get('colors/:id')
+  async findOneVariantColor(@Param('id', ParseIntPipe) id: number) {
+    return this.variantsService.findOneVariantColor(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVariantDto: UpdateVariantDto) {
-    return this.variantsService.update(+id, updateVariantDto);
+  @Put('colors/:id')
+  async updateVariantColor(
+    @Param('id') id: number,
+    @Body() updateVariantDto: UpdateVariantColorDto,
+  ) {
+    return this.variantsService.updateVariantColor(id, updateVariantDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.variantsService.remove(+id);
+  @Delete('colors/:id')
+  async removeVariantColor(@Param('id', ParseIntPipe) id: number) {
+    return this.variantsService.removeVariantColor(id);
+  }
+
+  @Post('sizes')
+  async createVariantSize(
+    @Body() createVariantDto: CreateVariantSizeDto,
+  ): Promise<VariantSize> {
+    return await this.variantsService.createVariantSize(createVariantDto);
+  }
+
+  @Get('sizes')
+  async findAllVariantSizes() {
+    return this.variantsService.findAllVariantSize();
+  }
+
+  @Get('sizes/:id')
+  async findOneVariantSize(@Param('id', ParseIntPipe) id: number) {
+    return this.variantsService.findOneVariantSizes(id);
+  }
+
+  @Put('sizes/:id')
+  async updateVariantSize(
+    @Param('id') id: number,
+    @Body() updateVariantDto: UpdateVariantSizeDto,
+  ) {
+    return this.variantsService.updateVariantSize(id, updateVariantDto);
+  }
+
+  @Delete('sizes/:id')
+  async removeVariantSize(@Param('id', ParseIntPipe) id: number) {
+    return this.variantsService.removeVariantSize(id);
   }
 }
