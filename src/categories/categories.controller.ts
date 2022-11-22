@@ -7,13 +7,17 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
+
 import { User } from '../users/entities';
 import { Auth, GetUser } from '../auth/decorators';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 import { Category } from './entities';
 import { ValidRoles } from '../auth/interfaces/valid-roles';
+import { QueryDto } from '../common/dtos/pagination.dto';
+import { Categories } from './interfaces';
 
 @Controller('categories')
 export class CategoriesController {
@@ -29,8 +33,8 @@ export class CategoriesController {
   }
 
   @Get()
-  async findAll(): Promise<Category[]> {
-    return await this.categoriesService.findAll();
+  async findAll(@Query() queryDto: QueryDto): Promise<Categories> {
+    return await this.categoriesService.findAll(queryDto);
   }
 
   @Get(':id')

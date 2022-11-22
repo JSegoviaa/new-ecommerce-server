@@ -8,6 +8,8 @@ import { Subcategory } from './entities';
 import { ErrorHandlerService } from '../common/services/error-handler/error-handler.service';
 import { CreateSlugService } from '../common/services/create-slug/create-slug.service';
 import { User } from '../users/entities/user.entity';
+import { QueryDto } from '../common/dtos/pagination.dto';
+import { Subcategories } from './interfaces';
 
 @Injectable()
 export class SubcategoriesService {
@@ -34,11 +36,20 @@ export class SubcategoriesService {
     } catch (error) {}
   }
 
-  async findAll(): Promise<Subcategory[]> {
-    try {
-      const subcategories = await this.subcategoryRepository.find();
+  async findAll(queryDto: QueryDto): Promise<Subcategories> {
+    const { limit = 10, offset = 0, sort = 'ASC', order = 'id' } = queryDto;
 
-      return subcategories;
+    try {
+      const [subcategories, total] = await Promise.all([
+        this.subcategoryRepository.find({
+          take: limit,
+          skip: offset,
+          order: { [order]: sort },
+        }),
+        this.subcategoryRepository.count(),
+      ]);
+
+      return { total, subcategories };
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
     }

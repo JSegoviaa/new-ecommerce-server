@@ -8,6 +8,8 @@ import { Category } from './entities';
 import { User } from '../users/entities';
 import { ErrorHandlerService } from '../common/services/error-handler/error-handler.service';
 import { CreateSlugService } from '../common/services/create-slug';
+import { QueryDto } from '../common/dtos/pagination.dto';
+import { Categories } from './interfaces';
 
 @Injectable()
 export class CategoriesService {
@@ -36,12 +38,22 @@ export class CategoriesService {
     }
   }
 
-  async findAll(): Promise<Category[]> {
-    try {
-      const categories = await this.categoryRepostiry.find();
+  async findAll(queryDto: QueryDto): Promise<Categories> {
+    const { limit = 10, offset = 0, sort = 'ASC', order = 'id' } = queryDto;
 
-      return categories;
+    try {
+      const [categories, total] = await Promise.all([
+        this.categoryRepostiry.find({
+          take: limit,
+          skip: offset,
+          order: { [order]: sort },
+        }),
+        this.categoryRepostiry.count(),
+      ]);
+
+      return { total, categories };
     } catch (error) {
+      console.log({ error });
       this.errorHandlerService.errorHandler(error);
     }
   }

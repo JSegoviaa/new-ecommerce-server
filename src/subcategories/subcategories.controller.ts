@@ -7,12 +7,15 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Auth, GetUser } from '../auth/decorators';
 import { CreateSubcategoryDto, UpdateSubcategoryDto } from './dto';
 import { Subcategory } from './entities';
 import { SubcategoriesService } from './subcategories.service';
 import { User } from '../users/entities/user.entity';
+import { QueryDto } from '../common/dtos/pagination.dto';
+import { Subcategories } from './interfaces';
 
 @Controller('subcategories')
 export class SubcategoriesController {
@@ -28,8 +31,8 @@ export class SubcategoriesController {
   }
 
   @Get()
-  async findAll() {
-    return await this.subcategoriesService.findAll();
+  async findAll(@Query() queryDto: QueryDto): Promise<Subcategories> {
+    return await this.subcategoriesService.findAll(queryDto);
   }
 
   @Get(':id')
