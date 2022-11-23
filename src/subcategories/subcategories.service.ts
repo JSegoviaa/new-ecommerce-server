@@ -33,7 +33,9 @@ export class SubcategoriesService {
       });
 
       return await this.subcategoryRepository.save(newSubcategory);
-    } catch (error) {}
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
   }
 
   async findAll(queryDto: QueryDto): Promise<Subcategories> {

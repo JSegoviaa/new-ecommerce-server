@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import * as dayjs from 'dayjs';
 import { User } from '../../users/entities';
+import { Category } from '../../categories/entities';
 @Entity({ name: 'subcategories' })
 export class Subcategory {
   @PrimaryGeneratedColumn()
@@ -27,6 +28,12 @@ export class Subcategory {
   @ManyToOne(() => User, (user) => user.createdBy, { eager: true })
   @JoinColumn({ name: 'createdBy' })
   createdBy: User;
+
+  @ManyToOne(() => Category, (category) => category.subcategory, {
+    eager: true,
+  })
+  @JoinColumn({ name: 'categoryId' })
+  category: Category;
 
   @ManyToOne(() => User, (user) => user.updatedBy, { eager: true })
   @JoinColumn({ name: 'updatedBy' })
