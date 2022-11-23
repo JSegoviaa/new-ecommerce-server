@@ -4,19 +4,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CommentsModule } from './comments/comments.module';
 import { CommonModule } from './common/common.module';
+import { FavoritesModule } from './favorites/favorites.module';
+import { HistoryModule } from './history/history.module';
 import { ImagesModule } from './images/images.module';
 import { ProductsModule } from './products/products.module';
+import { RatingsModule } from './ratings/ratings.module';
 import { RolesModule } from './roles/roles.module';
 import { SeedModule } from './seed/seed.module';
 import { SubcategoriesModule } from './subcategories/subcategories.module';
 import { TagsModule } from './tags/tags.module';
 import { UsersModule } from './users/users.module';
 import { VariantsModule } from './variants/variants.module';
-import { HistoryModule } from './history/history.module';
-import { FavoritesModule } from './favorites/favorites.module';
-import { CommentsModule } from './comments/comments.module';
-import { RatingsModule } from './ratings/ratings.module';
 
 @Module({
   imports: [
@@ -33,19 +33,19 @@ import { RatingsModule } from './ratings/ratings.module';
     }),
     AuthModule,
     CategoriesModule,
+    CommentsModule,
     CommonModule,
     FavoritesModule,
     HistoryModule,
     ImagesModule,
     ProductsModule,
+    RatingsModule,
     RolesModule,
     SeedModule,
     SubcategoriesModule,
     TagsModule,
     UsersModule,
     VariantsModule,
-    CommentsModule,
-    RatingsModule,
   ],
   controllers: [],
   providers: [],
