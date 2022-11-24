@@ -9,6 +9,7 @@ import {
 import * as dayjs from 'dayjs';
 import { User } from '../../users/entities';
 import { Subcategory } from '../../subcategories/entities';
+import { Image } from '../../images/entities';
 @Entity({ name: 'categories' })
 export class Category {
   @PrimaryGeneratedColumn()
@@ -26,16 +27,18 @@ export class Category {
   @Column({ type: 'boolean', default: false })
   isPublished: boolean;
 
-  @ManyToOne(() => User, (user) => user.createdBy, { eager: true })
+  @ManyToOne(() => User, ({ createdBy }) => createdBy, { eager: true })
   @JoinColumn({ name: 'createdBy' })
   createdBy: User;
 
-  @OneToMany(() => Subcategory, (subcategory) => subcategory.category)
-  subcategory: Subcategory;
+  @OneToMany(() => Subcategory, ({ category }) => category)
   @JoinColumn()
-  category: Subcategory;
+  subcategory: Subcategory;
 
-  @ManyToOne(() => User, (user) => user.updatedBy, { eager: true })
+  @ManyToOne(() => Image, ({ category }) => category, { eager: true })
+  image: Image;
+
+  @ManyToOne(() => User, ({ updatedBy }) => updatedBy, { eager: true })
   @JoinColumn({ name: 'updatedBy' })
   updatedBy: User;
 
@@ -44,5 +47,4 @@ export class Category {
 
   @Column({ type: 'timestamp', default: dayjs().format() })
   updatedAt: string;
-  //Falta image_id
 }

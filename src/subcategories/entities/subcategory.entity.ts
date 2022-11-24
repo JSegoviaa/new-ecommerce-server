@@ -8,6 +8,7 @@ import {
 import * as dayjs from 'dayjs';
 import { User } from '../../users/entities';
 import { Category } from '../../categories/entities';
+import { Image } from '../../images/entities';
 @Entity({ name: 'subcategories' })
 export class Subcategory {
   @PrimaryGeneratedColumn()
@@ -39,10 +40,12 @@ export class Subcategory {
   @JoinColumn({ name: 'updatedBy' })
   updatedBy: User;
 
+  @ManyToOne(() => Image, ({ subcategory }) => subcategory, { eager: true })
+  image: Image;
+
   @Column({ type: 'timestamp', default: dayjs().format() })
   createdAt: string;
 
   @Column({ type: 'timestamp', default: dayjs().format() })
   updatedAt: string;
-  //Falta image_id
 }
