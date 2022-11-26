@@ -14,14 +14,20 @@ import { Product } from './entities';
 import { ProductsService } from './products.service';
 import { QueryDto } from '../common/dtos/pagination.dto';
 import { Products } from './interfaces';
+import { Auth, GetUser } from '../auth/decorators';
+import { User } from '../users/entities/user.entity';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto): Promise<Product> {
-    return this.productsService.create(createProductDto);
+  @Auth()
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @GetUser() user: User,
+  ): Promise<Product> {
+    return this.productsService.create(createProductDto, user);
   }
 
   @Get()

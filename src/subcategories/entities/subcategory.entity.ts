@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -9,6 +11,7 @@ import * as dayjs from 'dayjs';
 import { User } from '../../users/entities';
 import { Category } from '../../categories/entities';
 import { Image } from '../../images/entities';
+import { Product } from '../../products/entities';
 @Entity({ name: 'subcategories' })
 export class Subcategory {
   @PrimaryGeneratedColumn()
@@ -39,6 +42,14 @@ export class Subcategory {
   @ManyToOne(() => User, (user) => user.updatedBy, { eager: true })
   @JoinColumn({ name: 'updatedBy' })
   updatedBy: User;
+
+  @ManyToMany(() => Product, (product) => product.subcategory)
+  @JoinTable({
+    name: 'subcategories_products',
+    joinColumn: { name: 'subcategoryId' },
+    inverseJoinColumn: { name: 'productId' },
+  })
+  product: Product[];
 
   @ManyToOne(() => Image, ({ subcategory }) => subcategory, { eager: true })
   image: Image;

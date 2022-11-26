@@ -2,11 +2,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as dayjs from 'dayjs';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../users/entities';
+import { Subcategory } from '../../subcategories/entities';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -38,6 +40,9 @@ export class Product {
   @ManyToOne(() => User, ({ updatedBy }) => updatedBy, { eager: true })
   @JoinColumn({ name: 'updatedBy' })
   updatedBy: User;
+
+  @ManyToMany(() => Subcategory, (subcatgory) => subcatgory.product)
+  subcategory: Subcategory[];
 
   @Column({
     type: 'timestamp',

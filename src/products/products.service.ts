@@ -8,6 +8,7 @@ import { ErrorHandlerService } from '../common/services/error-handler';
 import { CreateSlugService } from '../common/services/create-slug';
 import { QueryDto } from '../common/dtos';
 import { Products } from './interfaces';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -18,11 +19,13 @@ export class ProductsService {
     private readonly createSlugService: CreateSlugService,
   ) {}
 
-  create(createProductDto: CreateProductDto): Promise<Product> {
+  create(createProductDto: CreateProductDto, user: User): Promise<Product> {
     try {
       const newProduct = this.productRepository.create({
         ...createProductDto,
         slug: this.createSlugService.createSlug(createProductDto.title),
+        createdBy: user,
+        updatedBy: user,
       });
 
       return this.productRepository.save(newProduct);
