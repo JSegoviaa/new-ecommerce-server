@@ -44,6 +44,7 @@ export class SeedService {
     await this.insertRoles();
     await this.insertUsers();
     await this.insertCategories();
+    await this.insertSubategories();
   }
 
   private async insertRoles() {
@@ -125,6 +126,24 @@ export class SeedService {
       const queryBuilder = this.categoryRepository.createQueryBuilder();
 
       await queryBuilder.delete().where({}).execute();
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async insertSubategories() {
+    const seedSubcategories = initialData.subcategories;
+
+    const subcategories: Subcategory[] = [];
+
+    try {
+      seedSubcategories.forEach((subcategory) => {
+        subcategories.push(this.subcategoryRepository.create(subcategory));
+      });
+
+      await this.subcategoryRepository.save(seedSubcategories);
+
+      return subcategories[0];
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
     }
