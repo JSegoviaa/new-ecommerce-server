@@ -6,7 +6,6 @@ import { User } from './entities';
 import { CommonModule } from '../common/common.module';
 import { UsersController } from './users.controller';
 import { AuthModule } from '../auth/auth.module';
-import { PassportModule } from '@nestjs/passport';
 
 @Module({
   controllers: [UsersController],
@@ -16,6 +15,6 @@ import { PassportModule } from '@nestjs/passport';
     CommonModule,
     forwardRef(() => AuthModule),
   ],
-  exports: [UsersService],
+  exports: [UsersService, TypeOrmModule],
 })
 export class UsersModule {}
