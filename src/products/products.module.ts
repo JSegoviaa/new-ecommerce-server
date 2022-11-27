@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities';
 import { CommonModule } from '../common/common.module';
 import { AuthModule } from '../auth/auth.module';
@@ -16,5 +17,6 @@ import { SubcategoriesModule } from '../subcategories/subcategories.module';
     CommonModule,
     SubcategoriesModule,
   ],
+  exports: [TypeOrmModule],
 })
 export class ProductsModule {}

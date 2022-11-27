@@ -2,7 +2,12 @@ import * as bcrypt from 'bcrypt';
 import * as dayjs from 'dayjs';
 
 import { ValidRoles } from '../../auth/interfaces/valid-roles';
-import { createCategories, createSubcategories, createUsers } from '../helpers';
+import {
+  createCategories,
+  createProducts,
+  createSubcategories,
+  createUsers,
+} from '../helpers';
 
 interface SeedUser {
   firstName: string;
@@ -45,11 +50,26 @@ interface SeedSubcategory {
   category: any; //Category
 }
 
+interface SeedProducts {
+  title: string;
+  slug: string;
+  description: string;
+  discount: number;
+  isPublished: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: any; //User
+  updatedBy: any; //User
+  subcategory: any[]; //Subcategory[]
+}
+
 interface SeedData {
   users: SeedUser[];
   roles: SeedRoles[];
   categories: SeedCategory[];
   subcategories: SeedSubcategory[];
+  products: SeedProducts[];
 }
 
 export const initialData: SeedData = {
@@ -156,5 +176,22 @@ export const initialData: SeedData = {
       category: 1,
     },
     ...createSubcategories(),
+  ],
+  products: [
+    {
+      title: 'Esta es otra subcategoría',
+      slug: 'esta-es-otra-subcategoria',
+      createdAt: dayjs().format(),
+      createdBy: 1,
+      isActive: true,
+      isPublished: false,
+      updatedAt: dayjs().format(),
+      updatedBy: 1,
+      description: 'esto es una descripción',
+      discount: 0,
+      subcategory: [1, 2],
+    },
+    ,
+    ...createProducts(),
   ],
 };

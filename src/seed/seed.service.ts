@@ -8,6 +8,7 @@ import { Category } from '../categories/entities';
 import { Subcategory } from '../subcategories/entities';
 import { ErrorHandlerService } from '../common/services/error-handler';
 import { Role } from '../roles/entities/role.entity';
+import { Product } from '../products/entities/product.entity';
 
 @Injectable()
 export class SeedService {
@@ -20,6 +21,8 @@ export class SeedService {
     private readonly subcategoryRepository: Repository<Subcategory>,
     @InjectRepository(Role)
     private readonly rolesRepository: Repository<Role>,
+    @InjectRepository(Product)
+    private readonly productsRepository: Repository<Product>,
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
 
@@ -34,6 +37,7 @@ export class SeedService {
   }
 
   private async deleteTables() {
+    await this.deleteProducts();
     await this.deleteSubcategories();
     await this.deleteCategories();
     await this.deleteUsers();
@@ -45,6 +49,7 @@ export class SeedService {
     await this.insertUsers();
     await this.insertCategories();
     await this.insertSubategories();
+    await this.insertProducts();
   }
 
   private async insertRoles() {
@@ -152,6 +157,34 @@ export class SeedService {
   private async deleteSubcategories() {
     try {
       const queryBuilder = this.subcategoryRepository.createQueryBuilder();
+
+      await queryBuilder.delete().where({}).execute();
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async insertProducts() {
+    const seedProducts = initialData.products;
+
+    const products: Product[] = [];
+
+    try {
+      seedProducts.forEach((product) => {
+        products.push(this.productsRepository.create(product));
+      });
+
+      await this.productsRepository.save(seedProducts);
+
+      return products[0];
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async deleteProducts() {
+    try {
+      const queryBuilder = this.productsRepository.createQueryBuilder();
 
       await queryBuilder.delete().where({}).execute();
     } catch (error) {
