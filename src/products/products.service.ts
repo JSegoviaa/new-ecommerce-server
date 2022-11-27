@@ -84,9 +84,14 @@ export class ProductsService {
     try {
       await this.findOne(id);
 
+      const subs = await this.subcategoryService.findByIds(
+        updateProductDto.subcategory,
+      );
+
       const updatedProduct = await this.productRepository.preload({
         id,
         ...updateProductDto,
+        subcategory: subs,
       });
 
       return this.productRepository.save(updatedProduct);
