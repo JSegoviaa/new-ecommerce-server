@@ -11,6 +11,6 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [SubcategoriesController],
   providers: [SubcategoriesService],
   imports: [TypeOrmModule.forFeature([Subcategory]), CommonModule, AuthModule],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, SubcategoriesService],
 })
 export class SubcategoriesModule {}

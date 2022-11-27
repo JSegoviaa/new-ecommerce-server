@@ -1,4 +1,11 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
+import { Subcategory } from '../../subcategories/entities';
 
 export class CreateProductDto {
   @IsString()
@@ -17,4 +24,8 @@ export class CreateProductDto {
 
   @IsBoolean()
   isActive: boolean;
+
+  @IsArray()
+  @IsNotEmpty()
+  subcategory: Subcategory[];
 }

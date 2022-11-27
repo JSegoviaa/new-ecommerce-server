@@ -4,11 +4,12 @@ import { Repository } from 'typeorm';
 
 import { CreateProductDto, UpdateProductDto } from './dto';
 import { Product } from './entities';
+import { User } from '../users/entities';
 import { ErrorHandlerService } from '../common/services/error-handler';
 import { CreateSlugService } from '../common/services/create-slug';
 import { QueryDto } from '../common/dtos';
 import { Products } from './interfaces';
-import { User } from '../users/entities/user.entity';
+import { SubcategoriesService } from '../subcategories/subcategories.service';
 
 @Injectable()
 export class ProductsService {
@@ -17,15 +18,24 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
     private readonly errorHandlerService: ErrorHandlerService,
     private readonly createSlugService: CreateSlugService,
+    private readonly subcategoryService: SubcategoriesService,
   ) {}
 
-  create(createProductDto: CreateProductDto, user: User): Promise<Product> {
+  async create(
+    createProductDto: CreateProductDto,
+    user: User,
+  ): Promise<Product> {
     try {
+      const subs = await this.subcategoryService.findByIds(
+        createProductDto.subcategory,
+      );
+
       const newProduct = this.productRepository.create({
         ...createProductDto,
         slug: this.createSlugService.createSlug(createProductDto.title),
         createdBy: user,
         updatedBy: user,
+        subcategory: subs,
       });
 
       return this.productRepository.save(newProduct);
