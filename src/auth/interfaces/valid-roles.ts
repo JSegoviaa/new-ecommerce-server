@@ -3,4 +3,5 @@ export enum ValidRoles {
   admin = 'Administrador',
   moderador = 'Moderador',
   user = 'Usuario',
+  guest = 'Invitado',
 }

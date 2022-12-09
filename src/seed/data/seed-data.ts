@@ -140,6 +140,17 @@ export const initialData: SeedData = {
       createdAt: dayjs().format(),
       updatedAt: dayjs().format(),
     },
+    {
+      firstName: 'Usuario',
+      lastName: 'Invitado',
+      email: 'test7@test.com',
+      isActive: true,
+      password: bcrypt.hashSync('Contraseña', 10),
+      phoneNumber: '1122334455',
+      role: 5,
+      createdAt: dayjs().format(),
+      updatedAt: dayjs().format(),
+    },
     ...createUsers(),
   ],
   roles: [
@@ -147,6 +158,7 @@ export const initialData: SeedData = {
     { role: ValidRoles.admin },
     { role: ValidRoles.moderador },
     { role: ValidRoles.user },
+    { role: ValidRoles.guest },
   ],
   categories: [
     {
