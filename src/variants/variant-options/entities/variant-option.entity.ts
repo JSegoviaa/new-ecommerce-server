@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Image } from '../../../images/entities';
 
 @Entity({ name: 'variant_options' })
 export class VariantOption {
@@ -25,4 +32,12 @@ export class VariantOption {
 
   @Column({ default: 0, type: 'float' })
   diameter: number;
+
+  @ManyToMany(() => Image, (image) => image.variantOptions)
+  @JoinTable({
+    name: 'variant_options_images',
+    joinColumn: { name: 'variantOptionId' },
+    inverseJoinColumn: { name: 'imageId' },
+  })
+  images: Image[];
 }

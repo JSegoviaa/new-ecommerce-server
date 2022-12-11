@@ -1,4 +1,11 @@
-import { IsNumber, IsOptional, Min } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  Min,
+} from 'class-validator';
+import { Image } from '../../../images/entities';
 
 export class CreateVariantOptionDto {
   @IsNumber()
@@ -34,4 +41,8 @@ export class CreateVariantOptionDto {
   @Min(0)
   @IsOptional()
   diameter?: number;
+
+  @IsArray()
+  @IsNotEmpty()
+  images: Image[];
 }
