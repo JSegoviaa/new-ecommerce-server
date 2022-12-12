@@ -48,6 +48,27 @@ export class AuthService {
     return { token, user };
   }
 
+  async adminLogin(loginDto: LoginDto): Promise<AuthResponse> {
+    const { email, password } = loginDto;
+
+    const user = await this.usersService.findOneByEmailLogin(email);
+    if (!bcrypt.compareSync(password, user.password)) {
+      throw new BadRequestException('Email or password does not match.');
+    }
+
+    if (!this.isValidRole(user.role.id)) {
+      throw new UnauthorizedException(
+        `${user.firstName} ${user.lastName} is not admin user.`,
+      );
+    }
+
+    delete user.password;
+
+    const token = this.getJwt(user.id);
+
+    return { token, user };
+  }
+
   async renewJwt(user: User): Promise<AuthResponse> {
     const token = this.getJwt(user.id);
 
@@ -68,5 +89,9 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  isValidRole(role: number): boolean {
+    return role === 1 || role === 2 || role === 3 ? true : false;
   }
 }

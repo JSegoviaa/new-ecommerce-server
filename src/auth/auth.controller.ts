@@ -20,6 +20,11 @@ export class AuthController {
     return await this.authService.login(loginDto);
   }
 
+  @Post('admin-login')
+  async adminLogin(@Body() loginDto: LoginDto): Promise<AuthResponse> {
+    return await this.authService.adminLogin(loginDto);
+  }
+
   @Get('renew-jwt')
   @Auth()
   async renewJwt(@GetUser() user: User): Promise<AuthResponse> {
