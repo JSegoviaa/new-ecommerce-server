@@ -53,7 +53,9 @@ export class AuthService {
 
     const user = await this.usersService.findOneByEmailLogin(email);
     if (!bcrypt.compareSync(password, user.password)) {
-      throw new BadRequestException('Email or password does not match.');
+      throw new BadRequestException(
+        `${user.firstName} ${user.lastName} is not admin user.`,
+      );
     }
 
     if (!this.isValidRole(user.role.id)) {
