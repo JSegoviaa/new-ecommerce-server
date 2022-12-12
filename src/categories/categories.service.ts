@@ -51,6 +51,11 @@ export class CategoriesService {
         this.categoryRepostiry.count(),
       ]);
 
+      categories.forEach((cat) => {
+        delete cat.createdBy;
+        delete cat.updatedBy;
+      });
+
       return { total, categories };
     } catch (error) {
       console.log({ error });
