@@ -46,7 +46,10 @@ export class SubcategoriesService {
         this.subcategoryRepository.find({
           take: limit,
           skip: offset,
-          order: { [order]: sort },
+          order:
+            order === 'category.title'
+              ? { category: { title: sort } }
+              : { [order]: sort },
         }),
         this.subcategoryRepository.count(),
       ]);
