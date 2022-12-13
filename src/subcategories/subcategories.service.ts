@@ -51,6 +51,19 @@ export class SubcategoriesService {
         this.subcategoryRepository.count(),
       ]);
 
+      subcategories.forEach((sub) => {
+        delete sub.createdBy;
+        delete sub.updatedBy;
+        delete sub.category.createdBy;
+        delete sub.category.updatedBy;
+        delete sub.category.createdAt;
+        delete sub.category.updatedAt;
+        delete sub.category.id;
+        delete sub.category.image;
+        delete sub.category.isActive;
+        delete sub.category.isPublished;
+      });
+
       return { total, subcategories };
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
