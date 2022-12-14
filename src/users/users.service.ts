@@ -25,14 +25,17 @@ export class UsersService {
   ) {}
 
   async getUsers(queryDto: QueryDto): Promise<Users> {
-    const { limit = 10, offset = 10, sort = 'ASC', order = 'id' } = queryDto;
+    const { limit = 10, offset = 0, sort = 'ASC', order = 'id' } = queryDto;
 
     try {
       const [users, total] = await Promise.all([
         this.usersRepository.find({
           take: limit,
           skip: offset,
-          order: { [order]: sort },
+          order:
+            order === 'role.role'
+              ? { role: { role: sort } }
+              : { [order]: sort },
         }),
         this.usersRepository.count(),
       ]);
