@@ -41,7 +41,9 @@ export class Product {
   @JoinColumn({ name: 'updatedBy' })
   updatedBy: User;
 
-  @ManyToMany(() => Subcategory, (subcatgory) => subcatgory.product)
+  @ManyToMany(() => Subcategory, (subcatgory) => subcatgory.product, {
+    eager: true,
+  })
   subcategory: Subcategory[];
 
   @Column({

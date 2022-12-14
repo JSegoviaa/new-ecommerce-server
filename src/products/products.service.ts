@@ -57,6 +57,34 @@ export class ProductsService {
         this.productRepository.count(),
       ]);
 
+      products.forEach((product) => {
+        delete product.createdBy.createdAt;
+        delete product.createdBy.email;
+        delete product.createdBy.isActive;
+        delete product.createdBy.password;
+        delete product.createdBy.phoneNumber;
+        delete product.createdBy.role;
+        delete product.createdBy.updatedAt;
+
+        delete product.updatedBy.createdAt;
+        delete product.updatedBy.email;
+        delete product.updatedBy.isActive;
+        delete product.updatedBy.password;
+        delete product.updatedBy.phoneNumber;
+        delete product.updatedBy.role;
+        delete product.updatedBy.updatedAt;
+
+        product.subcategory.forEach((sub) => {
+          delete sub.createdAt;
+          delete sub.createdBy;
+          delete sub.category;
+          delete sub.isActive;
+          delete sub.isPublished;
+          delete sub.updatedAt;
+          delete sub.updatedBy;
+        });
+      });
+
       return { total, products };
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
