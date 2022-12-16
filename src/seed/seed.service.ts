@@ -9,6 +9,7 @@ import { Subcategory } from '../subcategories/entities';
 import { ErrorHandlerService } from '../common/services/error-handler';
 import { Role } from '../roles/entities/role.entity';
 import { Product } from '../products/entities/product.entity';
+import { SubcategoriesService } from '../subcategories/subcategories.service';
 
 @Injectable()
 export class SeedService {
@@ -24,6 +25,7 @@ export class SeedService {
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>,
     private readonly errorHandlerService: ErrorHandlerService,
+    private readonly subcategoryService: SubcategoriesService,
   ) {}
 
   async runSeed(): Promise<string> {
@@ -36,7 +38,7 @@ export class SeedService {
     return "Can't run this task in production environment";
   }
 
-  private async deleteTables() {
+  private async deleteTables(): Promise<void> {
     await this.deleteProducts();
     await this.deleteSubcategories();
     await this.deleteCategories();
@@ -44,7 +46,7 @@ export class SeedService {
     await this.deleteRoles();
   }
 
-  private async insertTables() {
+  private async insertTables(): Promise<void> {
     await this.insertRoles();
     await this.insertUsers();
     await this.insertCategories();
@@ -52,7 +54,7 @@ export class SeedService {
     await this.insertProducts();
   }
 
-  private async insertRoles() {
+  private async insertRoles(): Promise<Role> {
     const seedRoles = initialData.roles;
 
     const roles: Role[] = [];
@@ -70,7 +72,7 @@ export class SeedService {
     }
   }
 
-  private async deleteRoles() {
+  private async deleteRoles(): Promise<void> {
     try {
       const queryBuilder = this.rolesRepository.createQueryBuilder();
 
@@ -80,7 +82,7 @@ export class SeedService {
     }
   }
 
-  private async insertUsers() {
+  private async insertUsers(): Promise<User> {
     const seedUsers = initialData.users;
 
     const users: User[] = [];
@@ -98,7 +100,7 @@ export class SeedService {
     }
   }
 
-  private async deleteUsers() {
+  private async deleteUsers(): Promise<void> {
     try {
       const queryBuilder = this.usersRepository.createQueryBuilder();
 
@@ -108,7 +110,7 @@ export class SeedService {
     }
   }
 
-  private async insertCategories() {
+  private async insertCategories(): Promise<Category> {
     const seedCategories = initialData.categories;
 
     const categories: Category[] = [];
@@ -126,7 +128,7 @@ export class SeedService {
     }
   }
 
-  private async deleteCategories() {
+  private async deleteCategories(): Promise<void> {
     try {
       const queryBuilder = this.categoryRepository.createQueryBuilder();
 
@@ -136,7 +138,7 @@ export class SeedService {
     }
   }
 
-  private async insertSubategories() {
+  private async insertSubategories(): Promise<Subcategory> {
     const seedSubcategories = initialData.subcategories;
 
     const subcategories: Subcategory[] = [];
@@ -154,7 +156,7 @@ export class SeedService {
     }
   }
 
-  private async deleteSubcategories() {
+  private async deleteSubcategories(): Promise<void> {
     try {
       const queryBuilder = this.subcategoryRepository.createQueryBuilder();
 
@@ -164,17 +166,26 @@ export class SeedService {
     }
   }
 
-  private async insertProducts() {
+  private async insertProducts(): Promise<Product> {
     const seedProducts = initialData.products;
 
     const products: Product[] = [];
 
     try {
-      seedProducts.forEach((product) => {
-        products.push(this.productsRepository.create(product));
-      });
+      seedProducts.forEach(async (product, i) => {
+        const subs = await this.subcategoryService.findByIds(
+          seedProducts[i].subcategory,
+        );
 
-      await this.productsRepository.save(seedProducts);
+        const insertProduct = this.productsRepository.create({
+          ...product,
+          subcategory: subs,
+        });
+
+        await this.productsRepository.save(insertProduct);
+
+        products.push(insertProduct);
+      });
 
       return products[0];
     } catch (error) {
@@ -182,7 +193,7 @@ export class SeedService {
     }
   }
 
-  private async deleteProducts() {
+  private async deleteProducts(): Promise<void> {
     try {
       const queryBuilder = this.productsRepository.createQueryBuilder();
 

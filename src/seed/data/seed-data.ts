@@ -203,7 +203,6 @@ export const initialData: SeedData = {
       discount: 0,
       subcategory: [1, 2],
     },
-    ,
     ...createProducts(),
   ],
 };
