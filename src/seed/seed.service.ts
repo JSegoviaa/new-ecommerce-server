@@ -10,6 +10,8 @@ import { ErrorHandlerService } from '../common/services/error-handler';
 import { Role } from '../roles/entities/role.entity';
 import { Product } from '../products/entities/product.entity';
 import { SubcategoriesService } from '../subcategories/subcategories.service';
+import { Tag } from '../tags/entities';
+import { TagsService } from '../tags/tags.service';
 
 @Injectable()
 export class SeedService {
@@ -24,8 +26,11 @@ export class SeedService {
     private readonly rolesRepository: Repository<Role>,
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>,
+    @InjectRepository(Tag)
+    private readonly tagRepository: Repository<Tag>,
     private readonly errorHandlerService: ErrorHandlerService,
     private readonly subcategoryService: SubcategoriesService,
+    private readonly tagService: TagsService,
   ) {}
 
   async runSeed(): Promise<string> {
@@ -40,6 +45,7 @@ export class SeedService {
 
   private async deleteTables(): Promise<void> {
     await this.deleteProducts();
+    await this.deleteTags();
     await this.deleteSubcategories();
     await this.deleteCategories();
     await this.deleteUsers();
@@ -51,6 +57,7 @@ export class SeedService {
     await this.insertUsers();
     await this.insertCategories();
     await this.insertSubategories();
+    await this.insertTags();
     await this.insertProducts();
   }
 
@@ -166,6 +173,34 @@ export class SeedService {
     }
   }
 
+  private async insertTags(): Promise<Tag> {
+    const seedTags = initialData.tags;
+
+    const tags: Tag[] = [];
+
+    try {
+      seedTags.forEach((tag) => {
+        tags.push(this.tagRepository.create(tag));
+      });
+
+      await this.tagRepository.save(seedTags);
+
+      return tags[0];
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async deleteTags(): Promise<void> {
+    try {
+      const queryBuilder = this.tagRepository.createQueryBuilder();
+
+      await queryBuilder.delete().where({}).execute();
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
   private async insertProducts(): Promise<Product> {
     const seedProducts = initialData.products;
 
@@ -177,9 +212,12 @@ export class SeedService {
           seedProducts[i].subcategory,
         );
 
+        const tags = await this.tagService.findByIds(seedProducts[i].tag);
+
         const insertProduct = this.productsRepository.create({
           ...product,
           subcategory: subs,
+          tag: tags,
         });
 
         await this.productsRepository.save(insertProduct);

@@ -79,9 +79,23 @@ const createProduct = () => {
     subcategory: Array.from({ length: randomNumber(1, 4) }, () =>
       randomNumber(1, 239),
     ),
+    tag: Array.from({ length: randomNumber(1, 10) }, () =>
+      randomNumber(1, 450),
+    ),
   };
 };
 
 export const createProducts = (numUsers = 342) => {
   return Array.from({ length: numUsers }, createProduct);
+};
+
+const createTag = () => {
+  return {
+    name: faker.helpers.unique(faker.name.firstName),
+    createdAt: dayjs().format(),
+  };
+};
+
+export const createTags = (numTags = 450) => {
+  return Array.from({ length: numTags }, createTag);
 };

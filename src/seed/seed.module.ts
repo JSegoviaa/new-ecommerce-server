@@ -9,6 +9,7 @@ import { SeedController } from './seed.controller';
 import { SeedService } from './seed.service';
 import { SubcategoriesModule } from '../subcategories/subcategories.module';
 import { UsersModule } from '../users/users.module';
+import { TagsModule } from '../tags/tags.module';
 
 @Module({
   controllers: [SeedController],
@@ -21,6 +22,7 @@ import { UsersModule } from '../users/users.module';
     RolesModule,
     RolesModule,
     SubcategoriesModule,
+    TagsModule,
     UsersModule,
   ],
 })

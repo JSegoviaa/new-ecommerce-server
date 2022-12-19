@@ -6,6 +6,7 @@ import {
   createCategories,
   createProducts,
   createSubcategories,
+  createTags,
   createUsers,
 } from '../helpers';
 
@@ -62,6 +63,12 @@ interface SeedProducts {
   createdBy: any; //User
   updatedBy: any; //User
   subcategory: any[]; //Subcategory[]
+  tag: any[]; //Tag[]
+}
+
+interface SeedTags {
+  name: string;
+  createdAt: string;
 }
 
 interface SeedData {
@@ -70,6 +77,7 @@ interface SeedData {
   categories: SeedCategory[];
   subcategories: SeedSubcategory[];
   products: SeedProducts[];
+  tags: SeedTags[];
 }
 
 export const initialData: SeedData = {
@@ -202,7 +210,9 @@ export const initialData: SeedData = {
       description: 'esto es una descripción',
       discount: 0,
       subcategory: [1, 2],
+      tag: [1, 2],
     },
     ...createProducts(),
   ],
+  tags: [{ createdAt: dayjs().format(), name: 'etiqueta' }, ...createTags()],
 };
