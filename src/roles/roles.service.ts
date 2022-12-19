@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { Role } from './entities';
 import { ErrorHandlerService } from '../common/services/error-handler';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
+import { QueryDto } from '../common/dtos';
+import { Roles } from './interfaces';
 
 @Injectable()
 export class RolesService {
@@ -23,9 +25,19 @@ export class RolesService {
     }
   }
 
-  async findAll(): Promise<Role[]> {
+  async findAll(queryDto: QueryDto): Promise<Roles> {
+    const { limit = 10, offset = 0, sort = 'ASC', order = 'id' } = queryDto;
     try {
-      return this.rolesRepository.find();
+      const [roles, total] = await Promise.all([
+        this.rolesRepository.find({
+          take: limit,
+          skip: offset,
+          order: { [order]: sort },
+        }),
+        this.rolesRepository.count(),
+      ]);
+
+      return { total, roles };
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
     }

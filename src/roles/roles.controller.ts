@@ -7,12 +7,15 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
 import { Role } from './entities';
 import { RolesService } from './roles.service';
 import { ValidRoles } from '../auth/interfaces/valid-roles';
 import { Auth } from '../auth/decorators';
+import { QueryDto } from '../common/dtos';
+import { Roles } from './interfaces';
 
 @Controller('roles')
 @Auth(ValidRoles.superAdmin)
@@ -25,8 +28,8 @@ export class RolesController {
   }
 
   @Get()
-  async getAllRoles(): Promise<Role[]> {
-    return await this.rolesService.findAll();
+  async getAllRoles(@Query() queryDto: QueryDto): Promise<Roles> {
+    return await this.rolesService.findAll(queryDto);
   }
 
   @Get(':id')
