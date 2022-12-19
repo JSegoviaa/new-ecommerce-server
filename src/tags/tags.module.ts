@@ -11,5 +11,6 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [TagsController],
   providers: [TagsService],
   imports: [TypeOrmModule.forFeature([Tag]), CommonModule, AuthModule],
+  exports: [TagsService],
 })
 export class TagsModule {}

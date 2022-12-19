@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateTagDto, UpdateTagDto } from './dto';
 import { Tag } from './entities';
 import { ErrorHandlerService } from '../common/services/error-handler';
@@ -95,6 +95,22 @@ export class TagsService {
       await this.tagsRepository.remove(tag);
 
       return { ...tag, id };
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  async findByIds(id: Tag[]): Promise<Tag[]> {
+    try {
+      const tags = await this.tagsRepository.findBy({
+        id: In(id),
+      });
+
+      if (tags.length === 0) {
+        throw new NotFoundException('Tags not found');
+      }
+
+      return tags;
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
     }

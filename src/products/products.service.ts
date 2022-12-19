@@ -10,6 +10,7 @@ import { CreateSlugService } from '../common/services/create-slug';
 import { QueryDto } from '../common/dtos';
 import { Products } from './interfaces';
 import { SubcategoriesService } from '../subcategories/subcategories.service';
+import { TagsService } from 'src/tags/tags.service';
 
 @Injectable()
 export class ProductsService {
@@ -19,6 +20,7 @@ export class ProductsService {
     private readonly errorHandlerService: ErrorHandlerService,
     private readonly createSlugService: CreateSlugService,
     private readonly subcategoryService: SubcategoriesService,
+    private readonly tagService: TagsService,
   ) {}
 
   async create(
@@ -30,12 +32,15 @@ export class ProductsService {
         createProductDto.subcategory,
       );
 
+      const tags = await this.tagService.findByIds(createProductDto.tag);
+
       const newProduct = this.productRepository.create({
         ...createProductDto,
         slug: this.createSlugService.createSlug(createProductDto.title),
         createdBy: user,
         updatedBy: user,
         subcategory: subs,
+        tag: tags,
       });
 
       return this.productRepository.save(newProduct);

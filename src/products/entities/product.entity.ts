@@ -9,6 +9,7 @@ import {
 import * as dayjs from 'dayjs';
 import { User } from '../../users/entities';
 import { Subcategory } from '../../subcategories/entities';
+import { Tag } from '../../tags/entities';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -45,6 +46,9 @@ export class Product {
     eager: true,
   })
   subcategory: Subcategory[];
+
+  @ManyToMany(() => Tag, (tag) => tag.product, { eager: true })
+  tag: Tag[];
 
   @Column({
     type: 'timestamp',

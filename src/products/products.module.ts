@@ -7,6 +7,7 @@ import { Product } from './entities';
 import { CommonModule } from '../common/common.module';
 import { AuthModule } from '../auth/auth.module';
 import { SubcategoriesModule } from '../subcategories/subcategories.module';
+import { TagsModule } from '../tags/tags.module';
 
 @Module({
   controllers: [ProductsController],
@@ -16,6 +17,7 @@ import { SubcategoriesModule } from '../subcategories/subcategories.module';
     AuthModule,
     CommonModule,
     SubcategoriesModule,
+    TagsModule,
   ],
   exports: [TypeOrmModule],
 })

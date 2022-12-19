@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsString,
 } from 'class-validator';
+import { Tag } from '../../tags/entities';
 import { Subcategory } from '../../subcategories/entities';
 
 export class CreateProductDto {
@@ -28,4 +29,8 @@ export class CreateProductDto {
   @IsArray()
   @IsNotEmpty()
   subcategory: Subcategory[];
+
+  @IsArray()
+  @IsNotEmpty()
+  tag: Tag[];
 }
