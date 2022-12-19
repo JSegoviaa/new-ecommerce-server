@@ -68,6 +68,7 @@ export class ProductsService {
         delete product.description;
         delete product.discount;
         delete product.subcategory;
+        delete product.tag;
       });
 
       return { total, products };
