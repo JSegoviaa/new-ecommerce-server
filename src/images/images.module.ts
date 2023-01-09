@@ -11,5 +11,6 @@ import { Image } from './entities';
   controllers: [ImagesController],
   providers: [ImagesService, CloudinaryProvider],
   imports: [TypeOrmModule.forFeature([Image]), CommonModule],
+  exports: [TypeOrmModule, ImagesModule],
 })
 export class ImagesModule {}

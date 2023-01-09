@@ -5,6 +5,7 @@ import { ValidRoles } from '../../auth/interfaces/valid-roles';
 import {
   createCategories,
   createColors,
+  createImages,
   createProducts,
   createSubcategories,
   createTags,
@@ -32,7 +33,7 @@ interface SeedCategory {
   updatedAt: string;
   createdBy: any; //User
   updatedBy: any; //User
-  imageId: number;
+  image: any; //Image
 }
 
 interface SeedRoles {
@@ -48,7 +49,7 @@ interface SeedSubcategory {
   updatedAt: string;
   createdBy: any; //User
   updatedBy: any; //User
-  imageId: number;
+  image: any; //Image
   category: any; //Category
 }
 
@@ -82,6 +83,10 @@ interface SeedVariantSizes {
   short: string;
 }
 
+interface SeedImgs {
+  url: string;
+}
+
 interface SeedData {
   users: SeedUser[];
   roles: SeedRoles[];
@@ -93,6 +98,7 @@ interface SeedData {
     sizes: SeedVariantSizes[];
     colors: SeedVariantColors[];
   };
+  images: SeedImgs[];
 }
 
 export const initialData: SeedData = {
@@ -189,7 +195,7 @@ export const initialData: SeedData = {
       slug: 'esta-es-otra-categoria',
       createdAt: dayjs().format(),
       createdBy: 1,
-      imageId: 1,
+      image: 1,
       isActive: true,
       isPublished: false,
       updatedAt: dayjs().format(),
@@ -203,7 +209,7 @@ export const initialData: SeedData = {
       slug: 'esta-es-otra-subcategoria',
       createdAt: dayjs().format(),
       createdBy: 1,
-      imageId: 1,
+      image: 1,
       isActive: true,
       isPublished: false,
       updatedAt: dayjs().format(),
@@ -245,4 +251,10 @@ export const initialData: SeedData = {
       ...createColors(),
     ],
   },
+  images: [
+    {
+      url: 'https://media.npr.org/assets/img/2022/11/01/gettyimages-1189806758_custom-0a0266b3e82cfd9a1bb6016795a1a51b87277273.jpg',
+    },
+    ...createImages(),
+  ],
 };

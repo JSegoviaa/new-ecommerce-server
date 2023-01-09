@@ -14,6 +14,7 @@ import { Tag } from '../tags/entities';
 import { TagsService } from '../tags/tags.service';
 import { VariantColor } from '../variants/variant-colors/entities';
 import { VariantSize } from '../variants/variant-sizes/entities';
+import { Image } from '../images/entities';
 
 @Injectable()
 export class SeedService {
@@ -34,6 +35,8 @@ export class SeedService {
     private readonly variantColorRepository: Repository<VariantColor>,
     @InjectRepository(VariantSize)
     private readonly variantSizeRepository: Repository<VariantSize>,
+    @InjectRepository(Image)
+    private readonly imgsRepository: Repository<Image>,
     private readonly errorHandlerService: ErrorHandlerService,
     private readonly subcategoryService: SubcategoriesService,
     private readonly tagService: TagsService,
@@ -56,6 +59,7 @@ export class SeedService {
     await this.deleteTags();
     await this.deleteSubcategories();
     await this.deleteCategories();
+    await this.deleteImgs();
     await this.deleteUsers();
     await this.deleteRoles();
   }
@@ -63,6 +67,7 @@ export class SeedService {
   private async insertTables(): Promise<void> {
     await this.insertRoles();
     await this.insertUsers();
+    await this.insertImgs();
     await this.insertCategories();
     await this.insertSubategories();
     await this.insertTags();
@@ -300,6 +305,34 @@ export class SeedService {
   private async deleteProducts(): Promise<void> {
     try {
       const queryBuilder = this.productsRepository.createQueryBuilder();
+
+      await queryBuilder.delete().where({}).execute();
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async insertImgs(): Promise<Image> {
+    const seedImgs = initialData.images;
+
+    const images: Image[] = [];
+
+    try {
+      seedImgs.forEach((img) => {
+        images.push(this.imgsRepository.create(img));
+      });
+
+      await this.imgsRepository.save(seedImgs);
+
+      return images[0];
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async deleteImgs(): Promise<void> {
+    try {
+      const queryBuilder = this.imgsRepository.createQueryBuilder();
 
       await queryBuilder.delete().where({}).execute();
     } catch (error) {
