@@ -5,5 +5,6 @@ import { VariantOptionsModule } from './variant-options/variant-options.module';
 
 @Module({
   imports: [VariantSizesModule, VariantColorsModule, VariantOptionsModule],
+  exports: [VariantSizesModule, VariantColorsModule],
 })
 export class VariantsModule {}

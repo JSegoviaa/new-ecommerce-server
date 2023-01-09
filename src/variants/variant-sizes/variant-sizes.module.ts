@@ -11,5 +11,6 @@ import { VariantSize } from './entities';
   controllers: [VariantsController],
   providers: [VariantsService],
   imports: [TypeOrmModule.forFeature([VariantSize]), AuthModule, CommonModule],
+  exports: [TypeOrmModule, VariantSizesModule],
 })
 export class VariantSizesModule {}

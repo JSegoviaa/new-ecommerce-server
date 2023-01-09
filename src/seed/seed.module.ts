@@ -10,6 +10,7 @@ import { SeedService } from './seed.service';
 import { SubcategoriesModule } from '../subcategories/subcategories.module';
 import { UsersModule } from '../users/users.module';
 import { TagsModule } from '../tags/tags.module';
+import { VariantsModule } from 'src/variants/variants.module';
 
 @Module({
   controllers: [SeedController],
@@ -24,6 +25,7 @@ import { TagsModule } from '../tags/tags.module';
     SubcategoriesModule,
     TagsModule,
     UsersModule,
+    VariantsModule,
   ],
 })
 export class SeedModule {}

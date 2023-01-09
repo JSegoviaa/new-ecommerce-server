@@ -4,6 +4,7 @@ import * as dayjs from 'dayjs';
 import { ValidRoles } from '../../auth/interfaces/valid-roles';
 import {
   createCategories,
+  createColors,
   createProducts,
   createSubcategories,
   createTags,
@@ -71,6 +72,16 @@ interface SeedTags {
   createdAt: string;
 }
 
+interface SeedVariantColors {
+  name: string;
+  color: string;
+}
+
+interface SeedVariantSizes {
+  name: string;
+  short: string;
+}
+
 interface SeedData {
   users: SeedUser[];
   roles: SeedRoles[];
@@ -78,6 +89,10 @@ interface SeedData {
   subcategories: SeedSubcategory[];
   products: SeedProducts[];
   tags: SeedTags[];
+  variants: {
+    sizes: SeedVariantSizes[];
+    colors: SeedVariantColors[];
+  };
 }
 
 export const initialData: SeedData = {
@@ -215,4 +230,19 @@ export const initialData: SeedData = {
     ...createProducts(),
   ],
   tags: [{ createdAt: dayjs().format(), name: 'etiqueta' }, ...createTags()],
+  variants: {
+    sizes: [
+      { name: 'No aplica', short: 'NA' },
+      { name: 'Extra chico', short: 'XC' },
+      { name: 'Chico', short: 'C' },
+      { name: 'Mediano', short: 'M' },
+      { name: 'Grande', short: 'G' },
+      { name: 'Extra Grande', short: 'XG' },
+    ],
+    colors: [
+      { name: 'Blanco', color: '#FFFFFF' },
+      { name: 'Negro', color: '#000000' },
+      ...createColors(),
+    ],
+  },
 };

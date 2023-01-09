@@ -11,5 +11,6 @@ import { CommonModule } from '../../common/common.module';
   controllers: [VariantColorsController],
   providers: [VariantColorsService],
   imports: [TypeOrmModule.forFeature([VariantColor]), AuthModule, CommonModule],
+  exports: [VariantColorsModule, TypeOrmModule],
 })
 export class VariantColorsModule {}

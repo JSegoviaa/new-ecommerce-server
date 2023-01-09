@@ -12,6 +12,8 @@ import { Product } from '../products/entities/product.entity';
 import { SubcategoriesService } from '../subcategories/subcategories.service';
 import { Tag } from '../tags/entities';
 import { TagsService } from '../tags/tags.service';
+import { VariantColor } from '../variants/variant-colors/entities';
+import { VariantSize } from '../variants/variant-sizes/entities';
 
 @Injectable()
 export class SeedService {
@@ -28,6 +30,10 @@ export class SeedService {
     private readonly productsRepository: Repository<Product>,
     @InjectRepository(Tag)
     private readonly tagRepository: Repository<Tag>,
+    @InjectRepository(VariantColor)
+    private readonly variantColorRepository: Repository<VariantColor>,
+    @InjectRepository(VariantSize)
+    private readonly variantSizeRepository: Repository<VariantSize>,
     private readonly errorHandlerService: ErrorHandlerService,
     private readonly subcategoryService: SubcategoriesService,
     private readonly tagService: TagsService,
@@ -45,6 +51,8 @@ export class SeedService {
 
   private async deleteTables(): Promise<void> {
     await this.deleteProducts();
+    await this.deleteSizes();
+    await this.deleteColors();
     await this.deleteTags();
     await this.deleteSubcategories();
     await this.deleteCategories();
@@ -58,6 +66,8 @@ export class SeedService {
     await this.insertCategories();
     await this.insertSubategories();
     await this.insertTags();
+    await this.insertColors();
+    await this.insertSizes();
     await this.insertProducts();
   }
 
@@ -194,6 +204,62 @@ export class SeedService {
   private async deleteTags(): Promise<void> {
     try {
       const queryBuilder = this.tagRepository.createQueryBuilder();
+
+      await queryBuilder.delete().where({}).execute();
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async insertColors(): Promise<VariantColor> {
+    const seedColors = initialData.variants.colors;
+
+    const colors: VariantColor[] = [];
+
+    try {
+      seedColors.forEach((color) => {
+        colors.push(this.variantColorRepository.create(color));
+      });
+
+      await this.variantColorRepository.save(seedColors);
+
+      return colors[0];
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async deleteColors(): Promise<void> {
+    try {
+      const queryBuilder = this.variantColorRepository.createQueryBuilder();
+
+      await queryBuilder.delete().where({}).execute();
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async insertSizes(): Promise<VariantSize> {
+    const seedSizes = initialData.variants.sizes;
+
+    const sizes: VariantSize[] = [];
+
+    try {
+      seedSizes.forEach((size) => {
+        sizes.push(this.variantSizeRepository.create(size));
+      });
+
+      await this.variantSizeRepository.save(seedSizes);
+
+      return sizes[0];
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
+
+  private async deleteSizes(): Promise<void> {
+    try {
+      const queryBuilder = this.variantSizeRepository.createQueryBuilder();
 
       await queryBuilder.delete().where({}).execute();
     } catch (error) {

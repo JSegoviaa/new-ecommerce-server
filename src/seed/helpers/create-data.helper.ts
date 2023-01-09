@@ -99,3 +99,12 @@ const createTag = () => {
 export const createTags = (numTags = 450) => {
   return Array.from({ length: numTags }, createTag);
 };
+
+const createColor = () => ({
+  name: faker.helpers.unique(faker.color.human),
+  color: faker.color.rgb(),
+});
+
+export const createColors = (numColors = 31) => {
+  return Array.from({ length: numColors }, createColor);
+};
