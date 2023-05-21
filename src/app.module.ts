@@ -2,7 +2,6 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import LogsMiddleware from './common/middlewares/logger/logs.middleware';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CommentsModule } from './comments/comments.module';
@@ -13,11 +12,13 @@ import { ImagesModule } from './images/images.module';
 import { ProductsModule } from './products/products.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { RolesModule } from './roles/roles.module';
-import { SeedModule } from './seed/seed.module';
+// import { SeedModule } from './seed/seed.module';
 import { SubcategoriesModule } from './subcategories/subcategories.module';
 import { TagsModule } from './tags/tags.module';
 import { UsersModule } from './users/users.module';
 import { VariantsModule } from './variants/variants.module';
+import { ApiToken } from './common/middlewares/token';
+import { LogsMiddleware } from './common/middlewares/log';
 
 @Module({
   imports: [
@@ -42,7 +43,7 @@ import { VariantsModule } from './variants/variants.module';
     ProductsModule,
     RatingsModule,
     RolesModule,
-    SeedModule,
+    // SeedModule,
     SubcategoriesModule,
     TagsModule,
     UsersModule,
@@ -54,5 +55,6 @@ import { VariantsModule } from './variants/variants.module';
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LogsMiddleware).forRoutes('*');
+    consumer.apply(ApiToken).exclude('/api/auth/(.*)').forRoutes('*');
   }
 }
