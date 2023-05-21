@@ -19,6 +19,7 @@ import { UsersModule } from './users/users.module';
 import { VariantsModule } from './variants/variants.module';
 import { ApiToken } from './common/middlewares/token';
 import { LogsMiddleware } from './common/middlewares/log';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -32,6 +33,10 @@ import { LogsMiddleware } from './common/middlewares/log';
       database: process.env.DB_NAME,
       synchronize: true,
       autoLoadEntities: true,
+    }),
+    ThrottlerModule.forRoot({
+      ttl: +process.env.THROTTLER_TTL,
+      limit: +process.env.THROTTLER_LIMIT,
     }),
     AuthModule,
     CategoriesModule,
