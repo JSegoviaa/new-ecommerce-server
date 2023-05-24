@@ -11,7 +11,7 @@ export class ApiToken implements NestMiddleware {
     const apiToken = req.header('api-token');
 
     if (apiToken !== process.env.API_TOKEN) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(['Unauthorized token error']);
     }
 
     next();

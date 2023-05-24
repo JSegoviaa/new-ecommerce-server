@@ -53,11 +53,11 @@ export class UsersService {
       const user = await this.usersRepository.findOneBy({ email });
 
       if (!user) {
-        throw new BadRequestException(`Email or password doest not match`);
+        throw new BadRequestException([`Email or password doest not match`]);
       }
 
       if (!user.isActive) {
-        throw new UnauthorizedException('Inactive user');
+        throw new UnauthorizedException(['Inactive user']);
       }
 
       return user;

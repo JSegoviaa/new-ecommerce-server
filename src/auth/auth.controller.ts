@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseFilters } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { Auth, GetUser } from './decorators';
 import { LoginDto, RegisterDto } from './dto';
 import { AuthResponse } from './interfaces';
 import { User } from '../users/entities';
+import { HttpExceptionFilter } from '../common/filters/http-exception';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +27,7 @@ export class AuthController {
   }
 
   @Get('renew-jwt')
+  @UseFilters(new HttpExceptionFilter())
   @Auth()
   async renewJwt(@GetUser() user: User): Promise<AuthResponse> {
     return await this.authService.renewJwt(user);

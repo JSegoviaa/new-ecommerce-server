@@ -38,7 +38,7 @@ export class AuthService {
     const user = await this.usersService.findOneByEmailLogin(email);
 
     if (!bcrypt.compareSync(password, user.password)) {
-      throw new BadRequestException('Email or password does not match.');
+      throw new BadRequestException(['Email or password does not match.']);
     }
 
     delete user.password;
@@ -53,15 +53,13 @@ export class AuthService {
 
     const user = await this.usersService.findOneByEmailLogin(email);
     if (!bcrypt.compareSync(password, user.password)) {
-      throw new BadRequestException(
-        `${user.firstName} ${user.lastName} is not admin user.`,
-      );
+      throw new BadRequestException([`Email or password are incorrect.`]);
     }
 
     if (!this.isValidRole(user.role.id)) {
-      throw new UnauthorizedException(
+      throw new UnauthorizedException([
         `${user.firstName} ${user.lastName} is not admin user.`,
-      );
+      ]);
     }
 
     delete user.password;
@@ -83,11 +81,11 @@ export class AuthService {
     delete user.password;
 
     if (!user) {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException(['Invalid token']);
     }
 
     if (!user.isActive) {
-      throw new UnauthorizedException('Inactive user');
+      throw new UnauthorizedException(['Inactive user']);
     }
 
     return user;
