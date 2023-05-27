@@ -73,7 +73,11 @@ export class UsersService {
         password: bcrypt.hashSync(registerDto.password, 10),
       });
 
-      return await this.usersRepository.save(newUser);
+      const savedUser = await this.usersRepository.save(newUser);
+
+      delete savedUser.password;
+
+      return savedUser;
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
     }
@@ -84,7 +88,7 @@ export class UsersService {
       const user = await this.usersRepository.findOneBy({ id });
 
       if (!user) {
-        throw new NotFoundException(`User with id ${id} doest not exist`);
+        throw new NotFoundException([`User with id ${id} doest not exist`]);
       }
 
       delete user.password;
@@ -100,7 +104,9 @@ export class UsersService {
       const user = await this.usersRepository.findOneBy({ email });
 
       if (!user) {
-        throw new NotFoundException(`User with email ${email} doest not exist`);
+        throw new NotFoundException([
+          `User with email ${email} doest not exist`,
+        ]);
       }
 
       delete user.password;
@@ -154,7 +160,7 @@ export class UsersService {
     }
 
     if (id !== user.id) {
-      throw new UnauthorizedException("You can't edit other users profile");
+      throw new UnauthorizedException(["You can't edit other users profile"]);
     }
 
     return true;

@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Post,
   Put,
   Query,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { UsersService } from './users.service';
 import { Auth, GetUser } from '../auth/decorators';
 import { ValidRoles } from '../auth/interfaces';
 import { Users } from './interface';
+import { RegisterDto } from '../auth/dto';
 
 @Controller('users')
 export class UsersController {
@@ -32,6 +34,12 @@ export class UsersController {
     return await this.usersService.findUserById(id);
   }
 
+  @Post('')
+  @Auth(ValidRoles.superAdmin)
+  createUser(@Body() registerDto: RegisterDto): Promise<User> {
+    return this.usersService.create(registerDto);
+  }
+
   @Get('email/:email')
   @Auth(ValidRoles.superAdmin, ValidRoles.admin)
   async findUserByEmail(@Param('email') email: string): Promise<User> {
@@ -39,17 +47,17 @@ export class UsersController {
   }
 
   @Put(':id')
-  @Auth()
-  async updateUser(
+  @Auth(ValidRoles.superAdmin, ValidRoles.admin)
+  updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
     @GetUser() user: User,
   ): Promise<User> {
-    return await this.usersService.updateUser(id, updateUserDto, user);
+    return this.usersService.updateUser(id, updateUserDto, user);
   }
 
   @Delete(':id')
-  @Auth(ValidRoles.superAdmin, ValidRoles.admin)
+  @Auth(ValidRoles.superAdmin)
   async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return await this.usersService.deleteUser(id);
   }

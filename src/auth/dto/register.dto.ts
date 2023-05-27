@@ -1,4 +1,12 @@
-import { IsEmail, IsPositive, IsString, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { Role } from '../../roles/entities/role.entity';
 
 export class RegisterDto {
@@ -17,4 +25,14 @@ export class RegisterDto {
 
   @IsPositive()
   role: Role;
+
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean;
+
+  @IsString()
+  @IsOptional()
+  @MinLength(10)
+  @MaxLength(10)
+  phoneNumber?: string;
 }
