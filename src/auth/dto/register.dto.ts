@@ -32,7 +32,6 @@ export class RegisterDto {
 
   @IsString()
   @IsOptional()
-  @MinLength(10)
   @MaxLength(10)
   phoneNumber?: string;
 }
