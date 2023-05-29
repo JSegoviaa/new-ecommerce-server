@@ -73,6 +73,8 @@ export class UsersService {
         password: bcrypt.hashSync(registerDto.password, 10),
       });
 
+      newUser.createdAt = dayjs().format();
+
       const savedUser = await this.usersRepository.save(newUser);
 
       delete savedUser.password;
