@@ -18,35 +18,39 @@ import { QueryDto } from '../common/dtos';
 import { Roles } from './interfaces';
 
 @Controller('roles')
-@Auth(ValidRoles.superAdmin)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
-  async createRole(@Body() createRole: CreateRoleDto): Promise<Role> {
-    return await this.rolesService.create(createRole);
+  @Auth(ValidRoles.superAdmin)
+  createRole(@Body() createRole: CreateRoleDto): Promise<Role> {
+    return this.rolesService.create(createRole);
   }
 
   @Get()
-  async getAllRoles(@Query() queryDto: QueryDto): Promise<Roles> {
-    return await this.rolesService.findAll(queryDto);
+  @Auth(ValidRoles.superAdmin, ValidRoles.admin)
+  getAllRoles(@Query() queryDto: QueryDto): Promise<Roles> {
+    return this.rolesService.findAll(queryDto);
   }
 
   @Get(':id')
-  async findOneRole(@Param('id', ParseIntPipe) id: number): Promise<Role> {
-    return await this.rolesService.findOne(id);
+  @Auth(ValidRoles.superAdmin, ValidRoles.admin)
+  findOneRole(@Param('id', ParseIntPipe) id: number): Promise<Role> {
+    return this.rolesService.findOne(id);
   }
 
   @Put(':id')
-  async updateRole(
+  @Auth(ValidRoles.superAdmin)
+  updateRole(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRole: UpdateRoleDto,
   ): Promise<Role> {
-    return await this.rolesService.update(id, updateRole);
+    return this.rolesService.update(id, updateRole);
   }
 
   @Delete(':id')
-  async deleteRole(@Param('id', ParseIntPipe) id: number): Promise<Role> {
-    return await this.rolesService.remove(id);
+  @Auth(ValidRoles.superAdmin)
+  deleteRole(@Param('id', ParseIntPipe) id: number): Promise<Role> {
+    return this.rolesService.remove(id);
   }
 }

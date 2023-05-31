@@ -25,38 +25,38 @@ export class CategoriesController {
 
   @Post()
   @Auth(ValidRoles.superAdmin, ValidRoles.admin)
-  async create(
+  create(
     @Body() createCategoryDto: CreateCategoryDto,
     @GetUser() user: User,
   ): Promise<Category> {
-    return await this.categoriesService.create(createCategoryDto, user);
+    return this.categoriesService.create(createCategoryDto, user);
   }
 
   @Get()
-  async findAll(@Query() queryDto: QueryDto): Promise<Categories> {
-    return await this.categoriesService.findAll(queryDto);
+  findAll(@Query() queryDto: QueryDto): Promise<Categories> {
+    return this.categoriesService.findAll(queryDto);
   }
 
   @Get(':id')
-  @Auth(ValidRoles.superAdmin, ValidRoles.admin, ValidRoles.moderador)
-  async findOne(@Param('id') id: number): Promise<Category> {
-    return await this.categoriesService.findOne(id);
+  @Auth()
+  findOne(@Param('id') id: number): Promise<Category> {
+    return this.categoriesService.findOne(id);
   }
 
   @Put(':id')
   @Auth()
   @Auth(ValidRoles.superAdmin, ValidRoles.admin)
-  async update(
+  update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
     @GetUser() user: User,
   ): Promise<Category> {
-    return await this.categoriesService.update(id, updateCategoryDto, user);
+    return this.categoriesService.update(id, updateCategoryDto, user);
   }
 
   @Delete(':id')
   @Auth(ValidRoles.superAdmin, ValidRoles.admin)
-  async remove(@Param('id', ParseIntPipe) id: number): Promise<Category> {
-    return await this.categoriesService.remove(id);
+  remove(@Param('id', ParseIntPipe) id: number): Promise<Category> {
+    return this.categoriesService.remove(id);
   }
 }
