@@ -17,6 +17,9 @@ export class Image {
   @Column({ nullable: false })
   url: string;
 
+  @Column({ nullable: true })
+  version: number;
+
   @OneToMany(() => Category, ({ image }) => image)
   category: Category;
 

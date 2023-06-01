@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
 import toStream = require('buffer-to-stream');
+
 import { ErrorHandlerService } from '../common/services/error-handler';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Image } from './entities';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class ImagesService {
@@ -14,12 +15,16 @@ export class ImagesService {
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
 
-  async findImageByUrl(url: { image: string }): Promise<Image> {
+  async findImageByUrl(url: { version: number }): Promise<Image> {
     try {
-      const image = await this.imageRepository.findOneBy({ url: url.image });
+      const image = await this.imageRepository.findOneBy({
+        version: Number(url.version),
+      });
 
       if (!image) {
-        throw new NotFoundException([`Image with url ${url} doest not exist`]);
+        throw new NotFoundException([
+          `Image with url ${url.version} doest not exist`,
+        ]);
       }
 
       return image;
@@ -45,6 +50,7 @@ export class ImagesService {
 
             const newImage = this.imageRepository.create({
               url: result.secure_url,
+              version: result.version,
             });
 
             return await this.imageRepository.save(newImage);

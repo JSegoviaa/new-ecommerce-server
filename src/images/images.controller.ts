@@ -26,7 +26,7 @@ export class ImagesController {
 
   @Get()
   @Auth(ValidRoles.superAdmin, ValidRoles.admin, ValidRoles.moderador)
-  getImage(@Query() query: { image: string }) {
+  getImage(@Query() query: { version: number }) {
     console.log(query);
     return this.imagesService.findImageByUrl(query);
   }
