@@ -1,4 +1,11 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
+import { Image } from '../../images/entities/image.entity';
 
 export class CreateCategoryDto {
   @IsString()
@@ -10,4 +17,8 @@ export class CreateCategoryDto {
 
   @IsBoolean()
   isPublished: boolean;
+
+  @IsPositive()
+  @IsOptional()
+  image?: Image;
 }

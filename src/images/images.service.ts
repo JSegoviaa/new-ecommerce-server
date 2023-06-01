@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
 import toStream = require('buffer-to-stream');
 import { ErrorHandlerService } from '../common/services/error-handler';
@@ -13,6 +13,20 @@ export class ImagesService {
     private readonly imageRepository: Repository<Image>,
     private readonly errorHandlerService: ErrorHandlerService,
   ) {}
+
+  async findImageByUrl(url: { image: string }): Promise<Image> {
+    try {
+      const image = await this.imageRepository.findOneBy({ url: url.image });
+
+      if (!image) {
+        throw new NotFoundException([`Image with url ${url} doest not exist`]);
+      }
+
+      return image;
+    } catch (error) {
+      this.errorHandlerService.errorHandler(error);
+    }
+  }
 
   async uploadImage(
     file: Express.Multer.File,
@@ -33,10 +47,11 @@ export class ImagesService {
               url: result.secure_url,
             });
 
-            await this.imageRepository.save(newImage);
+            return await this.imageRepository.save(newImage);
           },
         );
         toStream(file.buffer).pipe(upload);
+        return upload;
       });
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
