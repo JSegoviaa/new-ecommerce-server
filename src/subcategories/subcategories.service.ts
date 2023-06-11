@@ -55,8 +55,20 @@ export class SubcategoriesService {
       ]);
 
       subcategories.forEach((sub) => {
-        delete sub.createdBy;
-        delete sub.updatedBy;
+        delete sub.createdBy.createdAt;
+        delete sub.createdBy.email;
+        delete sub.createdBy.phoneNumber;
+        delete sub.createdBy.password;
+        delete sub.createdBy.updatedAt;
+        delete sub.createdBy.isActive;
+        delete sub.createdBy.role;
+        delete sub.updatedBy.createdAt;
+        delete sub.updatedBy.email;
+        delete sub.updatedBy.phoneNumber;
+        delete sub.updatedBy.password;
+        delete sub.updatedBy.updatedAt;
+        delete sub.updatedBy.isActive;
+        delete sub.updatedBy.role;
         delete sub.category.createdBy;
         delete sub.category.updatedBy;
         delete sub.category.createdAt;
