@@ -45,7 +45,7 @@ export class CategoriesController {
 
   @Put(':id')
   @Auth()
-  @Auth(ValidRoles.superAdmin, ValidRoles.admin)
+  @Auth(ValidRoles.superAdmin, ValidRoles.admin, ValidRoles.moderador)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -55,7 +55,7 @@ export class CategoriesController {
   }
 
   @Delete(':id')
-  @Auth(ValidRoles.superAdmin, ValidRoles.admin)
+  @Auth(ValidRoles.superAdmin)
   remove(@Param('id', ParseIntPipe) id: number): Promise<Category> {
     return this.categoriesService.remove(id);
   }

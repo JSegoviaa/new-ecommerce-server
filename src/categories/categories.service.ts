@@ -32,6 +32,8 @@ export class CategoriesService {
         slug: this.createSlugService.createSlug(createCategoryDto.title),
       });
 
+      newCategory.createdAt = dayjs().format();
+
       return await this.categoryRepostiry.save(newCategory);
     } catch (error) {
       this.errorHandlerService.errorHandler(error);
@@ -52,8 +54,22 @@ export class CategoriesService {
       ]);
 
       categories.forEach((cat) => {
-        delete cat.createdBy;
-        delete cat.updatedBy;
+        delete cat.createdBy.id;
+        delete cat.createdBy.email;
+        delete cat.createdBy.password;
+        delete cat.createdBy.createdAt;
+        delete cat.createdBy.updatedAt;
+        delete cat.createdBy.isActive;
+        delete cat.createdBy.phoneNumber;
+        delete cat.createdBy.role;
+        delete cat.updatedBy.id;
+        delete cat.updatedBy.email;
+        delete cat.updatedBy.password;
+        delete cat.updatedBy.createdAt;
+        delete cat.updatedBy.updatedAt;
+        delete cat.updatedBy.isActive;
+        delete cat.updatedBy.phoneNumber;
+        delete cat.updatedBy.role;
       });
 
       return { total, categories };
